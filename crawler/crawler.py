@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+__author__     = "Vinicius Alves"
+__copyright__  = "Copyright 2020, The FAST-PROJ Group"
+__credits__    = ["Vinicius Alves"]
+__license__    = "MIT"
+__version__    = "1.0.0"
+__maintainer__ = "FAST-PROJ"
+__email__      = "#"
+__status__     = "Development"
+
 import urllib3
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -12,7 +22,7 @@ class Crawler:
         self.pages = pages
         self.max_depth = max_depth
         self.conn = None
-        
+
     '''
         Abre uma conexão com a base de dados
     '''
@@ -20,14 +30,14 @@ class Crawler:
         # @todo Criar singleton para reutilizar o objeto de conexão
         #if self.conn == None:
         self.conn = pymysql.connect(
-            host='localhost', 
+            host='localhost',
             user='root',
             passwd='root',
             db='crawler',
             autocommit=True
         )
         return self.conn.cursor()
-    
+
     '''
         Fecha a conexão com a base de dados
     '''
@@ -48,7 +58,7 @@ class Crawler:
         cursor.close()
         self.closeDatabaseConnection()
         return id_word_location
-    
+
     '''
         Insere a página indexada na base de dados
     '''
@@ -59,7 +69,7 @@ class Crawler:
         cursor.close()
         self.closeDatabaseConnection()
         return page_id
-        
+
     '''
         Verifica se a página já foi indexada pelo crawler
         Tipos de retorno da função
@@ -80,9 +90,9 @@ class Crawler:
                 INDEX_STATE = id_url
         cursor.close()
         self.closeDatabaseConnection()
-        
+
         return INDEX_STATE
-    
+
     '''
         Indexa uma palavra na base de dados
     '''
@@ -93,7 +103,7 @@ class Crawler:
         cursor.close()
         self.closeDatabaseConnection()
         return word_id
-    
+
     '''
         Verifica se uma palavra pertencente a uma página já foi indexada pelo crawler
         Tipos de retorno da função
@@ -104,14 +114,14 @@ class Crawler:
         INDEX_STATE = -1 # palavra não indexada
         cursor = self.getDatabaseConnection()
         cursor.execute('select id_word from words where word = %s', word)
-        
+
         if cursor.rowcount > 0:
             INDEX_STATE = cursor.fetchone()[0]
-        
+
         cursor.close()
         self.closeDatabaseConnection()
         return INDEX_STATE # palavra não indexada
-        
+
     '''
         Retorna os textos parseados - Selecionando o radical da palavra
     '''
@@ -122,19 +132,19 @@ class Crawler:
             uso do NLTK para remover o radical das palavras
         '''
         stemmer = nltk.stem.RSLPStemmer()
-        
+
         '''
             Criação de expressão regular para dividar a sentença palavra por palavra
         '''
         sppliter = re.compile("([\W][\W']*)")
-        
+
         parsed_words = []
         doc_words = [word for word in sppliter.split(sentence) if word != '']
         for word in doc_words:
-            word = word.strip()    
+            word = word.strip()
             if (word.lower() not in stopwords and len(word) > 1):
                 parsed_words.append(stemmer.stem(word).lower())
-                
+
         return parsed_words
 
     '''
@@ -167,8 +177,8 @@ class Crawler:
             if indexed == -1:
                 print('indexing word: ' + str(word))
                 id_word = self.insertWordToDatabase(word)
-            self.insertWordLocationToDatabase(id_new_page, id_word, position)        
-        
+            self.insertWordLocationToDatabase(id_new_page, id_word, position)
+
     '''
       Cria um pool http para parsear as paginas
       Itera até a profundidade máxima definida pelo usuário
@@ -195,7 +205,7 @@ class Crawler:
     def parsePageLinks(self, page, data):
         soup = BeautifulSoup(data, features="lxml")
         self.indexer(page, soup)
-        
+
         links = soup.find_all('a')
         links_counter = 1
         # lista de páginas seguidas pelo crawler
