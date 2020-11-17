@@ -1,5 +1,5 @@
 # profressor-virtual
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/FAST-PROJ/professor-virtual/blob/main/LICENSE)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/FAST-PROJ/professor-virtual/blob/master/LICENSE)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 >Este repositório contém o código fonte do trabalho de conclusão de curso apresentado ao Centro Universitário Senac - Campus Santo Amaro.
