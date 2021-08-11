@@ -8,7 +8,7 @@ __maintainer__ = "FAST-PROJ"
 __email__      = "#"
 __status__     = "Development"
 
-from pdfminer.high_level import extract_text
+from pdfminer.high_level import extract_text # pip install pdfminer.six
 import os
 
 class Reader:
@@ -16,17 +16,16 @@ class Reader:
     self.sourcePath = Reader.setSourceDataPath()
 
   def setSourceDataPath():
-    return os.path.join(os.getcwd(), "reader", "source")
+    # The last item '""' create a separator "/" for linux or "\" for windows
+    return os.path.join(os.getcwd(), "reader", "source", "")
 
   def getTextFromPdf(self, fileName):
     try:
-      text = extract_text(f"{self.sourcePath}\{fileName}.pdf")
+      return extract_text(f"{self.sourcePath}{fileName}.pdf")
     except Exception as e:
-      raise(str(e))
-    return text
+      print(str(e))
 
 reader = Reader()
 text = reader.getTextFromPdf('manual_ps5')
 
 print(text)
-
