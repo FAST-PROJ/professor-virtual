@@ -6,7 +6,7 @@ import nltk
 '''
 stopwords = nltk.corpus.stopwords.words('portuguese')
 stopwords.append('é')
-
+nltk.download('stopwords')
 '''
     uso do NLTK para remover o radical das palavras
 '''
