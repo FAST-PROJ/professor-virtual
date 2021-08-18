@@ -1,17 +1,40 @@
+#!/usr/bin/env python
+__author__     = "Mateus Ferreira"
+__copyright__  = "Copyright 2020, The FAST-PROJ Group"
+__credits__    = ["Mateus Ferreira"]
+__license__    = "MIT"
+__version__    = "1.0.0"
+__maintainer__ = "FAST-PROJ"
+__email__      = "#"
+__status__     = "Development"
+
 import pymysql
+from pandas.io import sql
+from sqlalchemy import create_engine
 
-# Simple routine to run a query on a database and print the results: 
 
-myConnection = pymysql.connect(
-  host="127.0.0.1",
-  port=3306,
-  user="root",
-  password="password",
-  autocommit=True
-)
+class dbConnection:
+  def getConnection():
+    return pymysql.connect(
+      host="127.0.0.1",
+      port=3306,
+      user="root",
+      password="password",
+      autocommit=True
+    )
 
-cur = myConnection.cursor()
-#cur.execute("INSERT INTO text.Files (full_name) VALUES ('manual_ps5');")
-cur.fetchall()
-myConnection.close()
+  def getFiles(self):
+    cur = dbConnection.getConnection().cursor()
+    cur.execute("""select id, full_name from text.Files""")
 
+    filesList = []
+    for item in cur.fetchall():
+      filesList.append({"id":item[0], "name":item[1]})
+    dbConnection.getConnection().close()
+    return filesList
+
+  def insertFileText(self, insertDataframe):
+    engine = create_engine('mysql+pymysql://root:password@localhost/text')
+    insertDataframe.columns = ['fileId', 'rawText', 'cleanText', 'sentence', 'words']
+    insertDataframe.set_index('fileId', inplace=True)
+    insertDataframe.to_sql('FilesText', con = engine, if_exists='append')

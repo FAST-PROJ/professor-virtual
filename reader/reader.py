@@ -57,18 +57,3 @@ class Cleaner:
 
   def wordToList(self, text):
     return re.findall("\w+", text, flags=re.M)
-
-reader = Reader()
-text = reader.getTextFromPdf('artigo')
-links = reader.getLinks(text)
-print(links)
-
-cleaner = Cleaner(text)
-numbersClean = cleaner.removeIsolatedNumbers(text)
-spaceClean = cleaner.removeSpaces(numbersClean)
-blankClean = cleaner.removeBlankLines(spaceClean)
-cleanText = cleaner.removeSpecialCaracteres(blankClean)
-
-sentences = cleaner.sentenceToList(cleanText)
-words = cleaner.wordToList(cleanText)
-print(cleanText)
