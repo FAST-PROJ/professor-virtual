@@ -27,7 +27,7 @@ class Reader:
       print(str(e))
 
   def getLinks(self, text):
-    return re.findall("(www\.\w+\.\w+)[^ \n]+", text, flags=re.M)
+    return re.findall("www\.\w+\.\w+[^ \n]+", text, flags=re.M)
 
 class Cleaner:
 

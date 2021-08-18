@@ -1,20 +1,17 @@
-import mysql.connector
+import pymysql
 
-mydb = mysql.connector.connect(
+# Simple routine to run a query on a database and print the results: 
+
+myConnection = pymysql.connect(
   host="127.0.0.1",
-  port="3306",
-  user="user",
-  password="password"
+  port=3306,
+  user="root",
+  password="password",
+  autocommit=True
 )
 
-cursor = mydb.cursor()
+cur = myConnection.cursor()
+#cur.execute("INSERT INTO text.Files (full_name) VALUES ('manual_ps5');")
+cur.fetchall()
+myConnection.close()
 
-cursor.execute("show databases")
-
-print(cursor.fetchall())
-
-cursor.close()
-
-# To initialize de container
-# docker-compose up
-# winpty docker exec -ti professor-virtual_db_1 mysql -u root -p
