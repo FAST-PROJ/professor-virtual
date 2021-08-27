@@ -12,28 +12,7 @@ from pdfminer.high_level import extract_text # pip install pdfminer.six
 import os
 import re
 
-class Reader:
-  def __init__(self):
-    self.sourcePath = Reader.setSourceDataPath()
-
-  def setSourceDataPath():
-    # The last item '""' create a separator "/" for linux or "\" for windows
-    return os.path.join(os.getcwd(), "reader", "source", "")
-
-  def getTextFromPdf(self, fileName):
-    try:
-      return extract_text(f"{self.sourcePath}{fileName}.pdf")
-    except Exception as e:
-      print(str(e))
-
-  def getLinks(self, text):
-    return re.findall("www\.\w+\.\w+[^ \n]+", text, flags=re.M)
-
 class Cleaner:
-
-  def __init__(self, text):
-    self.text = text
-
   def removeIsolatedNumbers(self, text):
     return re.sub(r"^\d+[^\w-]", "", text, flags=re.MULTILINE)
   

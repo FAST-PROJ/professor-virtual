@@ -12,7 +12,6 @@ import pymysql
 from pandas.io import sql
 from sqlalchemy import create_engine
 
-
 class dbConnection:
   def getConnection():
     return pymysql.connect(
@@ -22,6 +21,26 @@ class dbConnection:
       password="password",
       autocommit=True
     )
+
+  def getFile(self, id):
+    cur = dbConnection.getConnection().cursor()
+    cur.execute(f"""
+                    select 
+                      id, 
+                      full_name 
+                    from 
+                      text.files
+                    where
+                      id = {id}
+                """)
+
+    dbConnection.getConnection().close()
+    
+    result = cur.fetchall()[0]
+
+    file_info = {"id":result[0], "name":result[1]}
+
+    return file_info
 
   def getFiles(self):
     cur = dbConnection.getConnection().cursor()
@@ -33,8 +52,14 @@ class dbConnection:
     dbConnection.getConnection().close()
     return filesList
 
-  def insertFileText(self, insertDataframe):
+  def insertRawText(self, insertDataframe):
     engine = create_engine('mysql+pymysql://root:password@localhost/text')
-    insertDataframe.columns = ['fileId', 'rawText', 'cleanText', 'sentence', 'words']
+    insertDataframe.columns = ['fileId', 'rawText']
     insertDataframe.set_index('fileId', inplace=True)
-    insertDataframe.to_sql('FilesText', con = engine, if_exists='append')
+    insertDataframe.to_sql('ingestion_files', con = engine, if_exists='append')
+
+  def insertRefinedText(self, insertDataframe):
+    engine = create_engine('mysql+pymysql://root:password@localhost/text')
+    insertDataframe.columns = ['fileId', 'refinedText']
+    insertDataframe.set_index('fileId', inplace=True)
+    insertDataframe.to_sql('refined_files', con = engine, if_exists='append')
