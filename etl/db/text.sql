@@ -33,7 +33,8 @@ ALTER TABLE `refined_files` ADD FOREIGN KEY (`fileId`) REFERENCES `files` (`id`)
 CREATE TABLE `feature_files` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `fileId` int,
-  `featureText` longtext,
+  `word` longtext,
+  `sentence` longtext,
   `created_at` timestamp
 );
 

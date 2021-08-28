@@ -11,6 +11,7 @@ __status__     = "Development"
 from pdfminer.high_level import extract_text # pip install pdfminer.six
 from reader import Reader
 from cleaner import Cleaner
+from feature import Feature
 from mysql import dbConnection
 import pandas as pd
 
@@ -20,7 +21,8 @@ connection = dbConnection()
 reader = Reader()
 # Inicia a classe de limpeza
 cleaner = Cleaner()
-
+# Inicia a classe de features
+feature = Feature()
 
 def rawText(id):
 
@@ -33,12 +35,10 @@ def rawText(id):
   # Leitura do arquivo da pasta source
   reader.setTextFromPdf(f"{file['name']}")
 
-  text = reader.getTextFromPdf
-
   #Cria um dicionario com as informações do arquivo
   rawText = {
               "id": [reader.getFileId()], 
-              "text":[text]
+              "text":[reader.getTextFromPdf]
   }
 
   #Efetua o insert na camada bronze
@@ -50,18 +50,32 @@ def refinedText():
   spaceClean = cleaner.removeSpaces(numbersClean)
   blankClean = cleaner.removeBlankLines(spaceClean)
   cleanText = cleaner.removeSpecialCaracteres(blankClean)
+  cleaner.setCleanText(cleanText)
 
   #Cria um dicionario com as informações do arquivo
   refinedText = {
               "id": [reader.getFileId()],
-              "text":[cleanText]
+              "text":[cleaner.getCleanText()]
   }
 
-  #Efetua o insert na camada bronze
+  #Efetua o insert na camada silver
   connection.insertRefinedText(pd.DataFrame(data=refinedText))
+
+def featureText():
+
+  feature.setSentenceToList(cleaner.getCleanText())
+  feature.setWordToList(cleaner.getCleanText())
+
+  #Cria um dicionario com as informações do arquivo
+  featureText = {
+              "id": [reader.getFileId()],
+              "word":[str(feature.getWordToList())],
+              "sentence":[str(feature.getSentenceToList())]
+  }
+
+  #Efetua o insert na camada gold
+  connection.insertFeatureText(pd.DataFrame(data=featureText))
 
 rawText(1)
 refinedText()
-
-# sentences = cleaner.sentenceToList(cleanText)
-# words = cleaner.wordToList(cleanText)
+featureText()

@@ -12,6 +12,19 @@ from pdfminer.high_level import extract_text # pip install pdfminer.six
 import os
 import re
 
-class Reader:
+class Feature:
   def __init__(self):
-    self.sourcePath = Reader.setSourceDataPath()
+    self.words = ''
+    self.sentences = ''
+
+  def setSentenceToList(self, text):
+    self.sentences = re.findall("[^\n]+", text, flags=re.M)
+
+  def getSentenceToList(self):
+    return self.sentences
+
+  def setWordToList(self, text):
+    self.words = re.findall("\w+", text, flags=re.M)
+
+  def getWordToList(self):
+    return self.words

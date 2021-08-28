@@ -63,3 +63,9 @@ class dbConnection:
     insertDataframe.columns = ['fileId', 'refinedText']
     insertDataframe.set_index('fileId', inplace=True)
     insertDataframe.to_sql('refined_files', con = engine, if_exists='append')
+
+  def insertFeatureText(self, insertDataframe):
+    engine = create_engine('mysql+pymysql://root:password@localhost/text')
+    insertDataframe.columns = ['fileId', 'word', 'sentence']
+    insertDataframe.set_index('fileId', inplace=True)
+    insertDataframe.to_sql('feature_files', con = engine, if_exists='append')

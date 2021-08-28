@@ -13,6 +13,9 @@ import os
 import re
 
 class Cleaner:
+  def __init__(self):
+    self.cleanText = ''
+
   def removeIsolatedNumbers(self, text):
     return re.sub(r"^\d+[^\w-]", "", text, flags=re.MULTILINE)
   
@@ -31,8 +34,8 @@ class Cleaner:
     u = re.sub(r'[úûù]', 'u', o)
     return re.sub(r'[\(\)]', '', u)
 
-  def sentenceToList(self, text):
-    return re.findall("[^\n]+", text, flags=re.M)
+  def setCleanText(self, cleanText):
+    self.cleanText = cleanText
 
-  def wordToList(self, text):
-    return re.findall("\w+", text, flags=re.M)
+  def getCleanText(self):
+    return self.cleanText
