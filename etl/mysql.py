@@ -9,7 +9,6 @@ __email__      = "#"
 __status__     = "Development"
 
 import pymysql
-from pandas.io import sql
 from sqlalchemy import create_engine
 
 class dbConnection:

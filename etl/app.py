@@ -8,7 +8,6 @@ __maintainer__ = "FAST-PROJ"
 __email__      = "#"
 __status__     = "Development"
 
-from pdfminer.high_level import extract_text # pip install pdfminer.six
 from reader import Reader
 from cleaner import Cleaner
 from feature import Feature
