@@ -37,7 +37,7 @@ def rawText(id):
   #Cria um dicionario com as informações do arquivo
   rawText = {
               "id": [reader.getFileId()], 
-              "text":[reader.getTextFromPdf]
+              "text":[reader.getTextFromPdf()]
   }
 
   #Efetua o insert na camada bronze
