@@ -21,6 +21,10 @@ class dbConnection:
       autocommit=True
     )
 
+  def insertFile(self, file_name):
+    cur = dbConnection.getConnection().cursor()
+    cur.execute(f"""INSERT INTO text.files (full_name) VALUES ('{file_name}');""")
+
   def getFile(self, id):
     cur = dbConnection.getConnection().cursor()
     cur.execute(f"""

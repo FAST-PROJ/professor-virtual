@@ -31,3 +31,4 @@ install-dependencies:
 	@pip install pdfminer.six
 	@pip install PyMySQL
 	@pip install SQLAlchemy
+	@pip install Flask
