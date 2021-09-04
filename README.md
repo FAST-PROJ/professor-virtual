@@ -23,7 +23,9 @@ feature = Feature()Za8q57v4VYOQaic7%2BF1G2AUt6vVZk%2FpIE%2F2gpz6lHJzGa2sirnguN80
 
 ## Como rodar a etapa de ETL
 > Primeiro, execute o comando `make install-dependencies` para instalar as dependencias
+
 > Segundo, execute o comando `make start` para iniciar o container docker
+
 > Terceiro, execute o comando `make mysql-create-all` para criar as tabelas no mysql, e para acessar o MySQL execute o comando: `sudo mysql -h 127.0.0.1 -u root -p`
 A senha de acesso é: `password`
 
